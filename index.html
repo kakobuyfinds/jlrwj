@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Save as index.html. -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta name="theme-color" content="#123a2b">
+  <title>CSSBuy spreadsheet | Product Finds, QC &amp; Shipping Guide</title>
+  <meta name="description" content="Browse searchable CSSBuy spreadsheet finds from HipobuyFind, compare reference prices in USD, and check sizing, QC photos and shipping before ordering.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CSSBuy spreadsheet | Product Finds, QC &amp; Shipping Guide">
+  <meta property="og:description" content="Search product finds, compare reference prices and use a practical checklist before ordering through an agent.">
+
+  <!--
+    Search research and editorial decisions
+    https://grails.fit/cssbuy-spreadsheet emphasizes searchable products, sellers and QC.
+    https://cssbuywithqc.com/ emphasizes category filters and product-level QC photos.
+    https://cssbuy-spreadsheet.net/ combines a finds directory with buying guides.
+    This page applies fast category filters and adds a size and QC checklist,
+    plus a cost estimator that distinguishes item price from shipping and fees.
+    Product IDs, listing URLs and reference prices were checked against https://hipobuyfind.com/.
+    Search positions vary by location. Exact Google first-page positions were not verified.
+
+    Indexing submission is pending the final public URL and verified site access.
+    After publishing, add a self-referencing canonical using the final public URL.
+    Google: open URL Inspection in Search Console and select Request Indexing.
+    https://developers.google.com/search/docs/crawling-indexing/ask-google-to-recrawl
+    Bing: open URL Submission in Bing Webmaster Tools and submit the public URL.
+    https://www.bing.com/webmasters/help/URL-Submission-62f2860b
+  -->
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #15271e;
+      --muted: #4b6356;
+      --green: #123a2b;
+      --paper: #f3f6ef;
+      --line: #d4dfd4;
+      --white: #fff;
+      --lime: #d5f589;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-padding-top: 1rem; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 1rem/1.6 system-ui, sans-serif;
+    }
+    a { color: #155638; }
+    :focus-visible { outline: 3px solid #bc6816; outline-offset: 3px; }
+    [hidden] { display: none !important; }
+    .wrap { width: min(100% - 2rem, 70rem); margin-inline: auto; }
+    .hero {
+      padding: clamp(3rem, 9vw, 7rem) 0;
+      text-align: center;
+      color: var(--white);
+      background: radial-gradient(ellipse at 75% 0%, #32654a, var(--green) 70%);
+    }
+    h1, h2, h3 { line-height: 1.15; }
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 8.5vw, 6rem);
+      letter-spacing: -.065em;
+    }
+    h2 { margin: 0 0 .8rem; font-size: clamp(1.75rem, 4vw, 2.6rem); }
+    h3 { margin: 0 0 .5rem; font-size: 1.15rem; }
+    p { margin: .65rem 0; }
+    .intro { max-width: 39rem; margin: 1.2rem auto; color: #e0eee3; }
+    .actions, .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .7rem;
+    }
+    .actions { margin-top: 1.7rem; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.9rem;
+      padding: .65rem 1.2rem;
+      border: 1px solid currentColor;
+      border-radius: .7rem;
+      background: var(--green);
+      color: var(--white);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .hero .button { background: var(--lime); color: var(--green); border-color: var(--lime); }
+    .hero .button.secondary { background: transparent; color: var(--white); border-color: #c4dbcb; }
+    .nav { padding: 1rem 0; border-bottom: 1px solid var(--line); gap: .5rem 1.4rem; }
+    .nav a { font-weight: 650; }
+    main section { margin-block: 2.5rem; }
+    .panel {
+      border: 1px solid var(--line);
+      border-radius: 1rem;
+      padding: clamp(1rem, 3.5vw, 2rem);
+      background: var(--white);
+    }
+    .muted, caption { color: var(--muted); }
+    .filters, .costs, .steps, .categories { display: grid; gap: .85rem; }
+    .filters, .categories { grid-template-columns: repeat(auto-fit, minmax(min(100%, 13rem), 1fr)); }
+    .steps, .costs { grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+    .filters { margin-top: 1.25rem; }
+    label { display: block; font-weight: 650; }
+    input, select {
+      display: block;
+      width: 100%;
+      min-height: 2.8rem;
+      margin-top: .25rem;
+      padding: .55rem .65rem;
+      border: 1px solid #8eaa97;
+      border-radius: .55rem;
+      background: var(--white);
+      color: var(--ink);
+      font: inherit;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    caption { text-align: left; padding: .6rem 0; }
+    th, td { padding: .65rem .45rem; text-align: left; border-bottom: 1px solid var(--line); }
+    .price { white-space: nowrap; font-variant-numeric: tabular-nums; }
+    .categories { margin-top: 1rem; }
+    .categories a { font-weight: 650; padding: .55rem .7rem; border-radius: .5rem; background: var(--paper); }
+    .steps { padding-left: 1.35rem; }
+    .steps li { padding-right: .5rem; }
+    details { padding: .8rem 0; border-bottom: 1px solid var(--line); }
+    summary { cursor: pointer; font-weight: 700; }
+    output { font-weight: 800; }
+    footer { padding: 1.5rem 0 2rem; border-top: 1px solid var(--line); }
+    @media (max-width: 32rem) {
+      th, td { padding-inline: .25rem; }
+      table { font-size: .9rem; }
+    }
+  </style>
+<link rel="canonical" href="https://kakobuyfinds.github.io/jlrwj/">
+</head>
+<body>
+  <header class="hero">
+    <div class="wrap">
+      <h1>CSSBuy spreadsheet</h1>
+      <p class="intro">Compare shoes and clothing from HipobuyFind, check listing details, and estimate your total before placing an agent order.</p>
+      <div class="actions">
+        <a class="button" href="https://hipobuyfind.com/">CSSBuy spreadsheet</a>
+        <a class="button secondary" href="https://hipobuyfind.com/">Buy it now</a>
+      </div>
+    </div>
+  </header>
+
+  <nav class="nav wrap" aria-label="Page sections">
+    <a href="#catalog">Product catalog</a>
+    <a href="#ordering">Ordering checklist</a>
+    <a href="#shipping">Cost estimator</a>
+    <a href="#faq">FAQ</a>
+  </nav>
+
+  <main class="wrap">
+    <section class="panel" id="catalog" aria-labelledby="catalog-title">
+      <h2 id="catalog-title">Product catalog</h2>
+      <p class="muted">Selected listings from HipobuyFind. USD amounts are approximate listing references. Check the source page for the current price and available options.</p>
+
+      <div class="filters" id="filters" hidden>
+        <label for="query">Search products
+          <input id="query" type="search" placeholder="Product name or item ID" aria-controls="products">
+        </label>
+        <label for="category">Category
+          <select id="category" aria-controls="products">
+            <option value="">All categories</option>
+            <option>Shoes</option>
+            <option>Hoodies &amp; sweaters</option>
+          </select>
+        </label>
+      </div>
+      <p class="muted" id="count" role="status" hidden></p>
+
+      <div class="table-wrap">
+        <table id="products">
+          <caption>Select a product to open its HipobuyFind listing.</caption>
+          <thead>
+            <tr><th scope="col">Product</th><th scope="col">Category</th><th scope="col">Approx. USD</th></tr>
+          </thead>
+          <tbody>
+            <tr data-item="148189">
+              <th scope="row"><a href="https://hipobuyfind.com/goods-148189.html">Leather dress shoes</a></th>
+              <td>Shoes</td><td class="price">$55.56</td>
+            </tr>
+            <tr data-item="148188">
+              <th scope="row"><a href="https://hipobuyfind.com/goods-148188.html">Black canvas low-tops with gum soles</a></th>
+              <td>Shoes</td><td class="price">$62.50</td>
+            </tr>
+            <tr data-item="154936">
+              <th scope="row"><a href="https://hipobuyfind.com/goods-154936.html">Gray hooded sweatshirt</a></th>
+              <td>Hoodies &amp; sweaters</td><td class="price">$41.67</td>
+            </tr>
+            <tr data-item="154917">
+              <th scope="row"><a href="https://hipobuyfind.com/goods-154917.html">Fleece-lined hoodie</a></th>
+              <td>Hoodies &amp; sweaters</td><td class="price">$23.61</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <nav class="categories" aria-label="More HipobuyFind categories">
+        <a href="https://hipobuyfind.com/category-911-Shoes.html">Browse all shoes</a>
+        <a href="https://hipobuyfind.com/category-913-T-Shirts.html">Browse T-shirts</a>
+        <a href="https://hipobuyfind.com/category-914-Jackets.html">Browse jackets</a>
+        <a href="https://hipobuyfind.com/">Browse all categories</a>
+      </nav>
+    </section>
+
+    <section class="panel" id="ordering" aria-labelledby="ordering-title">
+      <h2 id="ordering-title">CSSBuy ordering checklist</h2>
+      <ol class="steps">
+        <li>
+          <h3>Find the seller’s link</h3>
+          <p>Open the HipobuyFind product page and locate its original seller listing. If you plan to use CSSBuy, check that its order form accepts the seller URL and loads the correct item and variant.</p>
+        </li>
+        <li>
+          <h3>Compare actual measurements</h3>
+          <p>For a hoodie, compare chest width and sleeve length with a garment you own. For footwear, use your measured foot length and the seller’s size chart. Confirm whether dimensions are in centimeters.</p>
+        </li>
+        <li>
+          <h3>Review warehouse QC</h3>
+          <p>If warehouse photos are available, check the size label, color, quantity and visible defects. Ask for a measurement photo if fit is uncertain, and check any return deadline before approving shipment.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="panel" id="shipping" aria-labelledby="shipping-title">
+      <h2 id="shipping-title">Estimate your total cost</h2>
+      <p class="muted">Use amounts in USD. Get a shipping quote for your destination and check whether the route charges by actual or volumetric weight.</p>
+      <p>Estimated total = items + domestic shipping + international shipping + fees and taxes.</p>
+      <form id="estimate" hidden>
+        <div class="costs">
+          <label>Items (USD)
+            <input name="items" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+          </label>
+          <label>Domestic shipping (USD)
+            <input name="domestic" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+          </label>
+          <label>International shipping (USD)
+            <input name="international" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+          </label>
+          <label>Fees and taxes (USD)
+            <input name="fees" type="number" min="0" step="0.01" inputmode="decimal" placeholder="0.00">
+          </label>
+        </div>
+        <p>Estimated total <output id="total" aria-live="polite">$0.00</output></p>
+      </form>
+    </section>
+
+    <section class="panel" id="faq" aria-labelledby="faq-title">
+      <h2 id="faq-title">Frequently asked questions</h2>
+      <details>
+        <summary>What is a CSSBuy spreadsheet?</summary>
+        <p>It is an organized list of product finds that helps shoppers compare listings before ordering through an agent. This independent guide uses listings from HipobuyFind. Confirm seller-link compatibility in CSSBuy before paying.</p>
+      </details>
+      <details>
+        <summary>Where can I see QC photos?</summary>
+        <p>Check the item’s listing and your agent’s warehouse order page for available QC photos. For your own order, verify that the photos show the size and color you selected.</p>
+      </details>
+      <details>
+        <summary>Do the catalog prices include shipping?</summary>
+        <p>The USD figures are approximate item prices. Add domestic delivery, international shipping and any applicable fees or taxes using your own quotes.</p>
+      </details>
+      <details>
+        <summary>Where does the Buy it now button take me?</summary>
+        <p>It opens the HipobuyFind homepage. Choose a category there or use the catalog above to open an individual listing.</p>
+      </details>
+    </section>
+  </main>
+
+  <footer class="wrap muted">
+    <p>Independent shopping guide. Catalog source <a href="https://hipobuyfind.com/">HipobuyFind</a>.</p>
+  </footer>
+
+  <script>
+    const filters = document.querySelector("#filters");
+    const query = document.querySelector("#query");
+    const category = document.querySelector("#category");
+    const count = document.querySelector("#count");
+    const rows = Array.from(document.querySelectorAll("#products tbody tr"));
+
+    function filterProducts() {
+      const term = query.value.trim().toLowerCase();
+      let visible = 0;
+
+      for (const row of rows) {
+        const searchable = `${row.cells[0].textContent} ${row.cells[1].textContent} ${row.dataset.item}`.toLowerCase();
+        const matchesCategory = !category.value || row.cells[1].textContent === category.value;
+        row.hidden = !matchesCategory || !searchable.includes(term);
+        if (!row.hidden) visible += 1;
+      }
+
+      count.textContent = visible
+        ? `${visible} of ${rows.length} products shown.`
+        : "No matching products. Try a different search or category.";
+    }
+
+    query.addEventListener("input", filterProducts);
+    category.addEventListener("change", filterProducts);
+    filterProducts();
+    filters.hidden = false;
+    count.hidden = false;
+
+    const estimate = document.querySelector("#estimate");
+    const inputs = Array.from(estimate.querySelectorAll("input"));
+    const total = document.querySelector("#total");
+    const dollars = new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" });
+
+    estimate.addEventListener("submit", event => event.preventDefault());
+    estimate.addEventListener("input", () => {
+      if (inputs.some(input => !input.validity.valid)) {
+        total.textContent = "Enter amounts of $0.00 or more, using up to two decimal places.";
+        return;
+      }
+      const cents = inputs.reduce((sum, input) => sum + Math.round((Number(input.value) || 0) * 100), 0);
+      total.textContent = dollars.format(cents / 100);
+    });
+    estimate.hidden = false;
+  </script>
+</body>
+</html>
